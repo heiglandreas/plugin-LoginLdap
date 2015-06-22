@@ -128,8 +128,7 @@ after_script:
   # change directory back to root travis dir
   - cd $PIWIK_ROOT_DIR
 
-  - ls config
-  - cat config/config.ini.php
+  - cat tmp/testingPathOverride.json
 
   # output contents of files w/ debugging info to screen
   - cat /var/log/nginx/error.log
