@@ -48,12 +48,6 @@ class LoginLdap extends \Piwik\Plugin
         return $hooks;
     }
 
-    public function postLoad()
-    {
-        echo "<pre>Loaded</pre>";
-    }
-
-
     public function getJsFiles(&$jsFiles)
     {
         $jsFiles[] = "plugins/Login/javascripts/login.js";
