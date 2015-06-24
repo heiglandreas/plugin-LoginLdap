@@ -251,7 +251,7 @@ class FrontController extends Singleton
         // try to get an option (to check if data can be queried)
         try {
             Option::get('TestingIfDatabaseConnectionWorked');
-        } catch (Exception $exception) {echo "<pre>".get_class(Config::getInstance())."</pre>";
+        } catch (Exception $exception) {echo "<pre>".Config::getInstance()->getLocalPath()."</pre>";
             if (self::shouldRethrowException()) {
                 throw $exception;
             }
