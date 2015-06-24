@@ -176,18 +176,19 @@ class Fixture extends \PHPUnit_Framework_Assert
 
     public function performSetUp($setupEnvironmentOnly = false)
     {
+        $this->dbName = $this->getDbName();
+
         // TODO: don't use static var, use test env var for this
         TestingEnvironmentManipulator::$extraPluginsToLoad = $this->extraPluginsToLoad;
 
         $this->getTestEnvironment()->testCaseClass = $this->testCaseClass;
         $this->getTestEnvironment()->fixtureClass = get_class($this);
+        $this->getTestEnvironment()->dbName = $this->dbName;
         $this->getTestEnvironment()->save();
 
         $this->createEnvironmentInstance();
 
         try {
-            $this->dbName = $this->getDbName();
-
             if ($this->persistFixtureData) {
                 $this->dropDatabaseInSetUp = false;
                 $this->dropDatabaseInTearDown = false;
@@ -222,7 +223,6 @@ class Fixture extends \PHPUnit_Framework_Assert
             Db::get()->query("SET wait_timeout=28800;");
 
             DbHelper::createTables();
-            echo "DB: ".print_r(Config::getInstance()->database, true);
 
             Manager::getInstance()->unloadPlugins();
 

@@ -253,9 +253,6 @@ class FrontController extends Singleton
         try {
             Option::get('TestingIfDatabaseConnectionWorked');
         } catch (Exception $exception) {
-            $testingVars = new TestingEnvironmentVariables();
-            echo "<pre>".print_r($testingVars, true)."</pre>";
-            echo "<pre>".Config::getInstance()->database."</pre>";
             if (self::shouldRethrowException()) {
                 throw $exception;
             }
