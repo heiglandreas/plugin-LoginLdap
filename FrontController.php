@@ -17,6 +17,7 @@ use Piwik\Exception\DatabaseSchemaIsNewerThanCodebaseException;
 use Piwik\Http\ControllerResolver;
 use Piwik\Http\Router;
 use Piwik\Plugins\CoreAdminHome\CustomLogo;
+use Piwik\Tests\Framework\TestingEnvironmentVariables;
 
 /**
  * This singleton dispatches requests to the appropriate plugin Controller.
@@ -251,7 +252,10 @@ class FrontController extends Singleton
         // try to get an option (to check if data can be queried)
         try {
             Option::get('TestingIfDatabaseConnectionWorked');
-        } catch (Exception $exception) {echo "<pre>".Config::getInstance()->getLocalPath()."</pre>";
+        } catch (Exception $exception) {
+            $testingVars = new TestingEnvironmentVariables();
+            echo "<pre>".print_r($testingVars, true)."</pre>";
+            echo "<pre>".Config::getInstance()->database."</pre>";
             if (self::shouldRethrowException()) {
                 throw $exception;
             }
