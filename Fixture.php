@@ -176,10 +176,17 @@ class Fixture extends \PHPUnit_Framework_Assert
 
     public function performSetUp($setupEnvironmentOnly = false)
     {
-        $this->dbName = $this->getDbName();
-
         // TODO: don't use static var, use test env var for this
         TestingEnvironmentManipulator::$extraPluginsToLoad = $this->extraPluginsToLoad;
+
+        $this->dbName = $this->getDbName();
+
+        if ($this->persistFixtureData) {
+            $this->dropDatabaseInSetUp = false;
+            $this->dropDatabaseInTearDown = false;
+            $this->overwriteExisting = false;
+            $this->removeExistingSuperUser = false;
+        }
 
         $this->getTestEnvironment()->testCaseClass = $this->testCaseClass;
         $this->getTestEnvironment()->fixtureClass = get_class($this);
@@ -188,22 +195,11 @@ class Fixture extends \PHPUnit_Framework_Assert
 
         $this->createEnvironmentInstance();
 
+        if ($this->dbName === false) { // must be after test config is created
+            $this->dbName = Config::getInstance()->database['dbname'];
+        }
+
         try {
-            if ($this->persistFixtureData) {
-                $this->dropDatabaseInSetUp = false;
-                $this->dropDatabaseInTearDown = false;
-                $this->overwriteExisting = false;
-                $this->removeExistingSuperUser = false;
-
-                Config::getInstance()->database_tests['dbname'] = Config::getInstance()->database['dbname'] = $this->dbName;
-
-                $this->getTestEnvironment()->dbName = $this->dbName;
-            }
-
-            if ($this->dbName === false) { // must be after test config is created
-                $this->dbName = Config::getInstance()->database['dbname'];
-            }
-
             static::connectWithoutDatabase();
 
             if ($this->dropDatabaseInSetUp
